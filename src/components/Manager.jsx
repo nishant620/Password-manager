@@ -3,27 +3,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCopy, faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { ToastContainer, toast, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-<<<<<<< HEAD
-import { v4 as uuidv4 } from "uuid";
 
 const Manager = () => {
-  const ref = useRef();
-  const passwordRef = useRef();
-=======
-
-const Manager = () => {
->>>>>>> 46736a8 (completed)
   const [form, setform] = useState({ site: "", username: "", password: "" });
   const [passwordArray, setpasswordArray] = useState([]);
   const [passwordVisible, setPasswordVisible] = useState(false); // visible initially
 
-<<<<<<< HEAD
-  useEffect(() => {
-    let passwords = localStorage.getItem("passwords");
-    if (passwords) {
-      setpasswordArray(JSON.parse(passwords));
-    }
-=======
   const getPasswords = async () => {
     let req = await fetch("http://localhost:3000/");
     let passwords = await req.json();
@@ -33,35 +18,18 @@ const Manager = () => {
 
   useEffect(() => {
     getPasswords();
->>>>>>> 46736a8 (completed)
   }, []);
 
   const togglePassword = () => {
     setPasswordVisible((prev) => !prev);
   };
 
-<<<<<<< HEAD
-  const savePassword = () => {
-=======
   const savePassword = async () => {
->>>>>>> 46736a8 (completed)
     if (
       form.site.length > 3 &&
       form.username.length > 3 &&
       form.password.length > 3
     ) {
-<<<<<<< HEAD
-      setpasswordArray([...passwordArray, { ...form, id: uuidv4() }]);
-      localStorage.setItem(
-        "passwords",
-        JSON.stringify([...passwordArray, { ...form, id: uuidv4() }])
-      );
-      toast.info("Password saved successfully!", { autoClose: 1500 });
-      console.log(...passwordArray, form);
-      setform({ site: "", username: "", password: "" });
-    } else {
-      toast.info("Error:Password not saved!", { autoClose: 1500 });
-=======
       if (form.id) {
         //  Update existing password
         await fetch(`http://localhost:3000/${form.id}`, {
@@ -85,7 +53,6 @@ const Manager = () => {
       getPasswords(); // refresh list
     } else {
       toast.error("⚠️ Please fill all fields correctly!", { autoClose: 1500 });
->>>>>>> 46736a8 (completed)
     }
   };
 
@@ -93,36 +60,13 @@ const Manager = () => {
     setform({ ...form, [e.target.name]: e.target.value });
   };
 
-<<<<<<< HEAD
-  // ✅ Reusable copy function with toast
-=======
   //  Reusable copy function with toast
->>>>>>> 46736a8 (completed)
   const handleCopy = (text) => {
     navigator.clipboard.writeText(text);
     toast.info("Copied to clipboard!", { autoClose: 1500 });
   };
 
   const handleEdit = (id) => {
-<<<<<<< HEAD
-    console.log("Editing Password with id", id);
-    const itemToEdit = passwordArray.find((item) => item.id === id);
-    setform(itemToEdit); // prefill the form
-    const updated = passwordArray.filter((item) => item.id !== id);
-    setpasswordArray(updated);
-    localStorage.setItem("passwords", JSON.stringify(updated));
-    toast.info("Edit mode activated", { autoClose: 1500 });
-  };
-
-  const handleDelete = (id) => {
-    console.log("Deleting Password with id", id);
-    let c = confirm("Do you really want to delete this password?");
-    if (c) {
-      const updated = passwordArray.filter((item) => item.id !== id);
-      setpasswordArray(updated);
-      localStorage.setItem("passwords", JSON.stringify(updated));
-      toast.error("Password deleted!", { autoClose: 1500 });
-=======
     const itemToEdit = passwordArray.find((item) => item.id === id);
     setform(itemToEdit);
     const updated = passwordArray.filter((item) => item.id !== id);
@@ -144,7 +88,6 @@ const Manager = () => {
       } else {
         toast.error("Failed to delete password!", { autoClose: 1500 });
       }
->>>>>>> 46736a8 (completed)
     }
   };
 
@@ -234,68 +177,6 @@ const Manager = () => {
           <h2 className="font-bold text-2xl py-1">Your Passwords</h2>
           {passwordArray.length === 0 && <div>No Passwords to show</div>}
           {passwordArray.length !== 0 && (
-<<<<<<< HEAD
-            // <table className="table-auto w-full rounded-md overflow-hidden mb-10">
-            //   <thead className="bg-green-800 text-white">
-            //     <tr>
-            //       <th className="py-2">Site</th>
-            //       <th className="py-2">Username</th>
-            //       <th className="py-2">Password</th>
-            //       <th className="py-2">Actions</th>
-            //     </tr>
-            //   </thead>
-            //   <tbody className="bg-green-100">
-            //     {passwordArray.map((item, index) => {
-            //       return (
-            //         <tr key={index}>
-            //           <td className="py-2 border border-white text-center w-32">
-            //             <a href={item.site} target="_blank">
-            //               {item.site}
-            //             </a>
-            //             <FontAwesomeIcon
-            //               icon={faCopy}
-            //               className="ml-2 cursor-pointer hover:text-blue-400"
-            //               onClick={() => handleCopy(item.site)}
-            //             />
-            //           </td>
-            //           <td className="py-2 border border-white text-center w-32">
-            //             {item.username}
-            //             <FontAwesomeIcon
-            //               icon={faCopy}
-            //               className="ml-2 cursor-pointer hover:text-blue-400"
-            //               onClick={() => handleCopy(item.username)}
-            //             />
-            //           </td>
-            //           <td className="py-2 border border-white text-center w-32">
-            //             {item.password}
-            //             <FontAwesomeIcon
-            //               icon={faCopy}
-            //               className="ml-2 cursor-pointer hover:text-blue-400"
-            //               onClick={() => handleCopy(item.password)}
-            //             />
-            //           </td>
-            //           {/* Actions table */}
-            //           <td className="py-2 border border-white text-center w-32">
-            //             <button
-            //               onClick={() => handleEdit(item.id)}
-            //               className="text-blue-600 hover:text-blue-800 mx-6"
-            //             >
-            //               <FontAwesomeIcon icon={faEdit} title="Edit" />
-            //             </button>
-            //             <button
-            //               onClick={() => handleDelete(item.id)}
-            //               className="text-red-600 hover:text-red-800 mx-6"
-            //             >
-            //               <FontAwesomeIcon icon={faTrash} title="Delete" />
-            //             </button>
-            //           </td>
-            //         </tr>
-            //       );
-            //     })}
-            //   </tbody>
-            // </table>
-=======
->>>>>>> 46736a8 (completed)
             <div className="overflow-x-auto">
               <table className="min-w-full table-auto rounded-md overflow-hidden mb-10 text-sm sm:text-base">
                 <thead className="bg-green-800 text-white">
@@ -329,11 +210,7 @@ const Manager = () => {
                           />
                         </td>
                         <td className="py-2 border border-white text-center w-32">
-<<<<<<< HEAD
-                          {item.password}
-=======
                           {"*".repeat(item.password.length)}
->>>>>>> 46736a8 (completed)
                           <FontAwesomeIcon
                             icon={faCopy}
                             className="ml-2 cursor-pointer hover:text-blue-400"
